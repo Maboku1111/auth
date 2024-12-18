@@ -1,8 +1,8 @@
-import './App.css'
-import { ProfileForm } from './components/register/register.component'
+import "./App.css";
+import { ProfileForm } from "./components/register/register.component";
 
 function App() {
-  ProfileForm();
+  return <ProfileForm />
 }
 
-export default App
+export default App;

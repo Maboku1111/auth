@@ -1,4 +1,3 @@
- 
 "use client"
 
 import { z } from "zod"
@@ -29,7 +28,6 @@ export function ProfileForm() {
         username: "",
       },
     })
-    const { handleSubmit } = useForm();
    
     // 2. Define a submit handler.
     function onSubmit(values) {
@@ -40,7 +38,7 @@ export function ProfileForm() {
 
     return (
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="username"

@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export const darkMode = ["class"];
-export const content = ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"];
+export const content = [
+  "app/**/*.{js,jsx,ts,tsx}",
+  "components/**/*.{js,jsx,ts,tsx}",
+  "./index.html",
+  "./src/**/*.{js,jsx,ts,tsx}",
+];
 export const theme = {
   extend: {
     colors: {
@@ -47,4 +52,3 @@ export const theme = {
 };
 import tailwindcssAnimate from "tailwindcss-animate";
 export const plugins = [tailwindcssAnimate];
-
