@@ -4,7 +4,7 @@ export const createUser = async () => {
     try {
         const users = await prisma.user.create({
             data: {
-
+                
             }
         });
         return users
