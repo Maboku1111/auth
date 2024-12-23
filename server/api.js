@@ -8,11 +8,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-// Catch-all for undefined routes
+app.use('/auth', router);
+
+// Catch-all for undefined routes - should be last
 app.use((req, res) => {
   res.status(404).send("Route not found");
 });
-app.use('/auth', router)
+
+// Handle errors globally (if you add an error handler later)
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
+});
 
 app.get('/', (req, res) => {
   res.send('Server is up & running..')

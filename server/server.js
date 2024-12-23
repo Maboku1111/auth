@@ -7,8 +7,8 @@ const PORT = 3000
 const server = http
   .createServer(app)
   .listen(PORT, async () => {
-    console.log(`Server is running at ${PORT}`)
-    await connectToDB()
+    await connectToDB();
+    console.log(`Server is running at ${PORT}`);
   })
   .on('error', () => {
     throw new Error()
