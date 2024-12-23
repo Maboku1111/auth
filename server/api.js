@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { router } from './routers/authRoutes.js';
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cookieParser());
 app.use((req, res) => {
   res.status(404).send("Route not found");
 });
+app.use('/auth', router)
 
 app.get('/', (req, res) => {
   res.send('Server is up & running..')

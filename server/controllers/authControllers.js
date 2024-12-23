@@ -1,4 +1,4 @@
-import { prisma } from "server/database/dbConfig.js";
+import { prisma } from "../database/dbConfig.js";
 
 export const createUser = async (req, res) => {
     try {
