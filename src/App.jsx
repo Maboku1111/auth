@@ -1,62 +1,107 @@
 import {Button} from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './components/ui/card'
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+} from './components/ui/form'
 import {Input} from '@/components/ui/input'
-import {Label} from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+
+import {useForm} from 'react-hook-form'
+import * as yup from 'yup'
+import {yupResolver} from '@hookform/resolvers/yup'
 
 const App = () => {
+  const formSchema = yup.object().shape({
+    username: yup.string().required(),
+    email: yup.string().email().required(),
+    age: yup.number().positive().integer().min(18).required(),
+    password: yup.string().min(8).max(32).required(),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null]),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: reset,
+  } = useForm({
+    resolver: yupResolver(formSchema),
+  })
+
+  const onSubmitHandler = (data) => {
+    console.log({data})
+    reset()
+  }
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Create project</CardTitle>
-          <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework">Framework</Label>
-                <Select>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="next">Next.js</SelectItem>
-                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                    <SelectItem value="astro">Astro</SelectItem>
-                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </div>
+    <Form {...Form}>
+      <form onSubmit={handleSubmit(onSubmitHandler)} className="space-y-8">
+        <FormField
+          control={Form.control}
+          name="username"
+          render={() => (
+            <>
+              <>
+                <>
+                  <>
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Full Name" {...register("username")} />
+                      </FormControl>
+                      <FormDescription>
+                        This is your public display name.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="shadcn" {...register("email")} />
+                      </FormControl>
+                      <FormDescription>This is your email</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                  <FormItem>
+                    <FormLabel>Age</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...register("age")} />
+                    </FormControl>
+                    <FormDescription>This is your age.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                </>
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...register("password")} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your password.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              </>
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...register("confirmPassword")} />
+                </FormControl>
+                <FormDescription>
+                  This is where you confirm password.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   )
 }
 
