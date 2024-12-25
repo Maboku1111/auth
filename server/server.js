@@ -1,6 +1,8 @@
 import http from 'http'
 import {app} from './api.js'
 import {connectToDB} from './database/dbConfig.js'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = 3000
 
