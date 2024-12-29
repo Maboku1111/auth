@@ -14,6 +14,8 @@ import {useForm} from 'react-hook-form'
 import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 
+import {ErrorBoundary} from 'react-error-boundary'
+
 const App = () => {
   const formSchema = yup.object().shape({
     username: yup.string().required(),
@@ -37,71 +39,77 @@ const App = () => {
   }
 
   return (
-    <Form {...Form}>
-      <form onSubmit={handleSubmit(onSubmitHandler)} className="space-y-8">
-        <FormField
-          control={Form.control}
-          name="username"
-          render={() => (
-            <>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <Form {...Form}>
+        <form onSubmit={handleSubmit(onSubmitHandler)} className="space-y-8">
+          <FormField
+            control={Form.control}
+            name="username"
+            render={() => (
               <>
                 <>
                   <>
+                    <>
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Full Name"
+                            {...register('username')}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This is your public display name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="shadcn" {...register('email')} />
+                        </FormControl>
+                        <FormDescription>This is your email</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    </>
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>Age</FormLabel>
                       <FormControl>
-                        <Input placeholder="Full Name" {...register("username")} />
+                        <Input placeholder="shadcn" {...register('age')} />
                       </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...register("email")} />
-                      </FormControl>
-                      <FormDescription>This is your email</FormDescription>
+                      <FormDescription>This is your age.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   </>
                   <FormItem>
-                    <FormLabel>Age</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...register("age")} />
+                      <Input placeholder="shadcn" {...register('password')} />
                     </FormControl>
-                    <FormDescription>This is your age.</FormDescription>
+                    <FormDescription>This is your password.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 </>
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...register("password")} />
+                    <Input
+                      placeholder="shadcn"
+                      {...register('confirmPassword')}
+                    />
                   </FormControl>
                   <FormDescription>
-                    This is your password.
+                    This is where you confirm password.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               </>
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...register("confirmPassword")} />
-                </FormControl>
-                <FormDescription>
-                  This is where you confirm password.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            </>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+    </ErrorBoundary>
   )
 }
 
