@@ -1,5 +1,3 @@
-import { generateToken } from "../utils/authUtils.js";
-
 // fetch service for authentication
 async function fetchData(url) {
     try {
@@ -7,7 +5,6 @@ async function fetchData(url) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${generateToken}`
             }
         });
         console.log(response);

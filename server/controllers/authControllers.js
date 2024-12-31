@@ -16,7 +16,11 @@ export const createUserController = async (req, res) => {
     const user = await createUser({username, email, age, password})
     const token = generateToken({user_id: user.id})
 
-    return res.status(201).json({data: token})
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      maxAge: 3600000,
+    })
+    return res.json({message: 'Authentication successful!'})
   } catch (error) {
     console.error(error)
     return res.status(500).json({error: 'Internal Server Error'})
@@ -40,7 +44,11 @@ export const getUserController = async (req, res) => {
     }
 
     const token = generateToken({user_id: user.id})
-    return res.json({data: token})
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      maxAge: 3600000,
+    })
+    return res.json({message: 'Authentication successful!'})
   } catch (error) {
     console.error(error)
     return res.status(500).json({error: 'Internal Server Error'})
