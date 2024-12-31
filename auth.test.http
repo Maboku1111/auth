@@ -1,0 +1,19 @@
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "username": "Drake",
+    "email": "drake@gmail.com",
+    "age": 37,
+    "password": "69@God"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "drake@gmail.com",
+    "password": "69@God"
+}

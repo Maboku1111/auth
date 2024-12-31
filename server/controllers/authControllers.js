@@ -6,6 +6,11 @@ import {generateToken, comparePasswords} from '../../utils/authUtils.js'
 
 export const createUserController = async (req, res) => {
   const {username, email, age, password} = req.body
+  console.log('Received req.body:', req.body)
+
+  if (!username || !email || !age || !password) {
+    return res.status(400).json({message: 'Missing required fields.'})
+  }
 
   try {
     const user = await createUser({username, email, age, password})

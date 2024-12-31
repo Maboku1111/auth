@@ -6,7 +6,7 @@ import {
 
 const router = express.Router()
 
-router.post('/create', createUserController)
+router.post('/register', createUserController)
 router.post('/login', getUserController)
 
 export {router}
