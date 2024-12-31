@@ -1,7 +1,15 @@
+import { generateToken } from "../utils/authUtils.js";
+
 // fetch service for authentication
 async function fetchData(url) {
     try {
-        let response = await fetch(url);
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${generateToken}`
+            }
+        });
         console.log(response);
         if (!response.ok) throw new Error('not a valid response');
         let data = await response.json();
