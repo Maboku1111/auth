@@ -1,14 +1,15 @@
 // fetch service for authentication
-function fetchData(url) {
-    return fetch(url)
-        .then((response) => {
-            if (!response.ok) throw new Error('not a valid response')
-            return response.json()
-        })
-        .then(data => data)
-        .catch((error) => {
-            console.error(error)
-        })
+async function fetchData(url) {
+    try {
+        let response = await fetch(url);
+        console.log(response);
+        if (!response.ok) throw new Error('not a valid response');
+        let data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 const registerUrl = 'http://localhost:3000/auth/register';

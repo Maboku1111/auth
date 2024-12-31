@@ -1,54 +1,41 @@
-import {prisma} from '../database/dbConfig.js'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import { createUser, findUserByUsernameOrEmail } from '../services/userService.js';
+import { generateToken, comparePasswords } from '../utils/authUtils.js';
 
-export const createUser = async (req, res) => {
-  const {username, email, age, password} = req.body
+export const createUserController = async (req, res) => {
+  const { username, email, age, password } = req.body;
+
   try {
-    const users = await prisma.user.create({
-      data: {
-        username,
-        email,
-        age,
-        password,
-      },
-    })
-    const id = users._id
+    const user = await createUser({ username, email, age, password });
+    const token = generateToken({ user_id: user.id });
 
-    const jwt_data = jwt.sign({user_id: id}, 'JWT_SECRET', {expiresIn: '1h'})
-    return res.status(201).json({data: jwt_data})
+    return res.status(201).json({ data: token });
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({error: 'Internal Server Error'})
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
-export const getUser = async (req, res) => {
-  const {username, email, password} = req.body
+export const getUserController = async (req, res) => {
+  const { username, email, password } = req.body;
 
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [{username: username}, {email: email}],
-      },
-    })
+    const user = await findUserByUsernameOrEmail(username, email);
 
     if (!user) {
       return res.status(404).json({ data: 'User not found' });
     }
 
-    const match = bcrypt.compareSync(password, user.password)
+    const isPasswordValid = comparePasswords(password, user.password);
 
-    if (match) {
-      const id = user.id
-
-      const jwt_data = jwt.sign({user_id: id}, 'JWT_SECRET', {expiresIn: '1h'})
-      return res.json({data: jwt_data})
-    } else {
-      return res.json({data: 'try again! user not found'})
+    if (!isPasswordValid) {
+      return res.status(401).json({ data: 'Invalid credentials' });
     }
+
+    const token = generateToken({ user_id: user.id });
+    return res.json({ data: token });
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({error: 'Internal Server Error'})
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
+
