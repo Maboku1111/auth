@@ -6,14 +6,23 @@ import {fileURLToPath} from 'url'
 import {dirname} from 'path'
 import path from 'path'
 import helmet from 'helmet'
+import dotenv from 'dotenv'
 import {router} from './routers/authRoutes.js'
+dotenv.config()
 
 const app = express()
 
 const verifyToken = (req, res, next) => {
-  const token = req.cookies.token
+  console.log('Cookies:', req.cookies)
+  const token = req.cookies.authToken
+
+  if (!token) {
+    return res.status(401).json({message: 'JWT must be provided'})
+  }
+
   try {
-    const user = jwt.verify(token, import.meta.env.JWT_SECRET)
+    // eslint-disable-next-line no-undef
+    const user = jwt.verify(token, process.env.JWT_SECRET)
     req.user = user
     next()
   } catch (err) {
@@ -23,7 +32,7 @@ const verifyToken = (req, res, next) => {
   }
 }
 
-app.use(cors())
+app.use(cors({origin: 'http://localhost:5173', credentials: true}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(helmet())
@@ -32,6 +41,7 @@ app.use(
     extended: true,
   })
 )
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -42,7 +52,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-app.use('/auth', verifyToken, router)
+app.use('/auth', router)
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173') // Adjust to match your frontend origin
@@ -63,6 +73,10 @@ app.use((err, req, res, next) => {
 
 app.get('/', (req, res) => {
   res.send('Server is up & running..')
+})
+
+app.get('/protected-route', verifyToken, (req, res) => {
+  res.json({message: 'Welcome!', user: req.user})
 })
 
 export {app}
