@@ -1,12 +1,10 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-
-const JWT_SECRET = 'JWT_SECRET';
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 
 export const generateToken = (payload, expiresIn = '1h') => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
-};
+  return jwt.sign(payload, import.meta.env.JWT_SECRET, {expiresIn})
+}
 
 export const comparePasswords = (plainPassword, hashedPassword) => {
-  return bcrypt.compareSync(plainPassword, hashedPassword);
-};
+  return bcrypt.compareSync(plainPassword, hashedPassword)
+}
