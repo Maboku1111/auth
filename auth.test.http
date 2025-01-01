@@ -2,10 +2,10 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username": "Drake",
-    "email": "drake@gmail.com",
-    "age": 37,
-    "password": "69@God"
+    "username": "Earl Sweatshirt",
+    "email": "earlyman@gmail.com",
+    "age": 30,
+    "password": "Voir@Dire"
 }
 
 ###

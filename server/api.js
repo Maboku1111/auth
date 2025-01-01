@@ -1,6 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import path from 'path';
+import helmet from 'helmet';
 import {router} from './routers/authRoutes.js'
 
 const app = express()
@@ -8,6 +12,22 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
+app.use(helmet());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "build")));
+
+// Catch-all handler to serve the index.html for all routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html")); 
+});
+
 app.use('/auth', router)
 
 app.use((req, res, next) => {
